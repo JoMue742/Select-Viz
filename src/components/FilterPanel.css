@@ -1,0 +1,170 @@
+.filter-panel {
+  width: 270px;
+  min-width: 270px;
+  background: var(--panel-bg);
+  border-right: 1px solid var(--border);
+  padding: 1rem 0.9rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.filter-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+.filter-panel-header h2 {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.reset-btn {
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.reset-btn:hover { background: var(--accent); color: var(--bg); }
+
+/* ── Gruppen ── */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.filter-group:last-child { border-bottom: none; flex: 1; }
+
+.filter-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.filter-label-range {
+  font-weight: 400;
+  font-size: 0.68rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--accent);
+}
+
+/* ── Sucheingabe ── */
+.filter-input {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 0.82rem;
+  padding: 0.4rem 0.6rem;
+  transition: border-color 0.15s;
+}
+.filter-input:focus { outline: none; border-color: var(--accent); }
+.filter-input::placeholder { color: var(--text-muted); }
+
+.clear-search {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+.clear-search:hover { color: var(--accent); }
+
+/* ── Zeitraum-Slider ── */
+.range-group { display: flex; align-items: center; gap: 0.35rem; }
+.range-edge { font-size: 0.6rem; color: var(--text-muted); white-space: nowrap; min-width: 32px; }
+.range-edge:last-child { text-align: right; }
+.range-sliders { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; }
+.range-input { width: 100%; accent-color: var(--accent); cursor: pointer; }
+
+/* ── Chips (Schreibrichtung) ── */
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.chip {
+  font-size: 0.68rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  white-space: nowrap;
+}
+.chip:hover { border-color: var(--accent); color: var(--text); }
+.chip--active { border-color: var(--accent); background: rgba(201,151,58,0.15); color: var(--accent); }
+
+/* ── Scroll-Liste (Alphabet) ── */
+.scroll-list {
+  max-height: 130px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.25rem;
+}
+.scroll-list::-webkit-scrollbar { width: 4px; }
+.scroll-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.scroll-item {
+  font-size: 0.76rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: background 0.1s, color 0.1s;
+}
+.scroll-item:hover { background: var(--hover-bg); color: var(--text); }
+.scroll-item--active { background: rgba(201,151,58,0.15); color: var(--accent); }
+
+/* ── Sprachen-Legende ── */
+.legend-group { flex: 1; min-height: 0; }
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  overflow-y: auto;
+  max-height: 300px;
+}
+.legend::-webkit-scrollbar { width: 3px; }
+.legend::-webkit-scrollbar-thumb { background: var(--border); }
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  padding: 0.2rem 0.3rem;
+  border-radius: 4px;
+  transition: background 0.1s;
+  border: 1px solid transparent;
+}
+.legend-item:hover { background: var(--hover-bg); }
+.legend-item--active { background: rgba(201,151,58,0.1); border-color: var(--accent); }
+
+.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.legend-name { font-size: 0.74rem; color: var(--text-secondary); }
