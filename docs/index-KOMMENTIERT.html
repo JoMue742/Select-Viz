@@ -1,0 +1,260 @@
+<!-- 
+  ════════════════════════════════════════════════════════════════════════════════
+  SELECT-VIZ - ANNOTIERTE HTML DATEI FÜR ANFÄNGER
+  
+  Diese Datei zeigt die ganze index.html mit detaillierten Kommentaren.
+  Du kannst diese Kommentare im HTML-Editor (VS Code) direkt sehen.
+  
+  STRUKTUR:
+  - <!doctype> Zeile 1
+  - <head> Abschnitt (Metadaten, nicht sichtbar)
+  - <body> Abschnitt (Sichtbare Inhalte + React-Start)
+  
+  WICHTIGSTE ZEILEN:
+  - Zeile 5: <meta charset="UTF-8"> = Sprachen-Unterstützung
+  - Zeile 10: <div id="root"> = Hier wird React die App einfügen
+  - Zeile 11: <script type="module"> = STARTKNOPF der Anwendung
+  ════════════════════════════════════════════════════════════════════════════════
+-->
+<!doctype html>
+<!-- DOCTYPE = Browser mitteilen: "Das ist HTML5 Dokument" (moderner Standard seit 2014) -->
+
+<html lang="en">
+  <!-- 
+    <html lang="en"> = Das äußerste Tag für die GANZE Seite
+    lang="en" = Diese Seite ist auf Englisch
+               (wichtig für: Screenreader für Blinde, Google Übersetzung, Spellcheck)
+  -->
+
+  <head>
+    <!-- 
+      <head> = Der "Kopf" der Seite
+      Alles hier ist NICHT sichtbar auf der Seite!
+      Dies ist nur Info FÜR den Browser & Suchmaschinen.
+    -->
+
+    <!-- ZEICHENSATZ: UTF-8 erlaubt alle Sprachen der Welt -->
+    <meta charset="UTF-8" />
+    <!-- 
+      Sagt dem Browser: "Diese HTML-Datei benutzt UTF-8 Zeichensatz"
+      UTF-8 = Standard der Moderne (unterstützt Deutsch: ä,ö,ü | Griechisch: Α,Β,Γ | Chinesisch: 中文)
+      Wenn diese Zeile fehlt → "Hyères" wird zu "HyÃ¨res" (kaputt!)
+      
+      / am Ende (<meta ... />) = "Das ist ein selbstschließendes Tag" (hat kein </meta>)
+    -->
+
+    <!-- FAVICON: Das kleine Icon im Browser-Tab -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- 
+      <link> = Externe Ressource verlinken (nicht verwechseln mit <a> für Hyperlinks!)
+      rel="icon" = Art des Links: "Das folgende ist ein Icon"
+      type="image/svg+xml" = Dateityp: SVG (Vektor-Format, skalierbar)
+      href="/favicon.svg" = Pfad: Von Projekt-Root (/) zum Ordner öffentliche Dateien
+      
+      Was du sehen kannst: Oben links im Browser-Tab → kleines buntes Icon
+    -->
+
+    <!-- VIEWPORT: Für Handy-Freundlichkeit (Responsive Design) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 
+      Sagt dem Browser auf Mobiltelefonen: "Passe die Seite an die Bildschirmgröße an"
+      width=device-width = Breite der Seite = Breite des Bildschirms
+      initial-scale=1.0 = Startzoom: 100% (nicht automatisch rausgezoomt/reingezoomt)
+      
+      WICHTIG: Ohne diese Zeile sieht die Seite auf Handy KOMISCH aus (zu klein, verschoben, etc.)
+      Mit dieser Zeile: Seite passt sich automatisch an!
+    -->
+
+    <!-- ROBOTS: Anweisung für Google und andere Suchmaschinen -->
+    <meta name="robots" content="noindex, nofollow" />
+    <!-- 
+      Sagt Google, Bing, etc.: "NICHT indexieren & NICHT folgen"
+      noindex = "Zeige diese Seite NICHT in Google-Suchergebnissen"
+      nofollow = "Folge den Links auf dieser Seite nicht"
+      
+      WARUM? Das ist ein Student-Projekt (prototyp), kein öffentliches Portal.
+      → Suchmaschinen sollen es nicht findet & verteilen.
+    -->
+
+    <!-- SEITEN-TITEL: Das wird im Browser-Tab oben angezeigt -->
+    <title>select-viz</title>
+    <!-- 
+      Dieser Text wird angezeigt:
+      1. Im Browser-Tab oben (nächst zu den Buttons)
+      2. In Lesezeichen / Favoriten
+      3. In Google-Suchergebnissen (wenn indexiert)
+      
+      Du kannst das ändern zu: <title>SELECT Visualisierung - Antike Inschriften</title>
+      Dann wird der Tab-Name automatisch aktualisiert.
+    -->
+
+  </head>
+  <!-- </head> = Ende des unsichtbaren Kopfes -->
+
+  <body>
+    <!-- 
+      <body> = Der "Körper" der Seite
+      Alles zwischen <body> und </body> wird auf dem Bildschirm SICHTBAR angezeigt.
+      
+      In unserem Fall: Fast nichts! Nur ein leerer <div id="root">
+      WARUM? Weil React JavaScript später den Inhalt hinzufügt.
+    -->
+
+    <!-- ROOT DIV: Der Container für React -->
+    <div id="root"></div>
+    <!-- 
+      <div> = "Division" (Bereich/Abschnitt) - ein neutraler Container
+      id="root" = Eindeutiger Name für dieses Element (only 1x pro Seite)
+      
+      Diese Zeile ist LEER - aber das ist ABSICHT!
+      
+      WARUM leer? React funktioniert so:
+      1. HTML lädt diese Datei
+      2. Der <div id="root"> ist noch leer
+      3. JavaScript (nächste Zeile!) wird ausgeführt
+      4. React sagt: "Finde <div id='root'>" ← getElementById('root')
+      5. React füllt diesen Div mit der App (Karte, Filter, Popups, etc.)
+      6. Auf dem Bildschirm entsteht eine volle Webseite
+      
+      Das ist "Client-Side Rendering" (die Seite wird im Browser gebaut, nicht auf dem Server)
+    -->
+
+    <!-- JAVASCRIPT: Der STARTKNOPF der ganzen Anwendung! -->
+    <script type="module" src="/src/main.jsx"></script>
+    <!-- 
+      <script> = "Führe diesen Code aus"
+      type="module" = Moderner JavaScript-Standard (ES6)
+                      Erlaubt: import/export (Code in mehrere Dateien aufteilen)
+      src="/src/main.jsx" = Pfad zur JavaScript-Datei
+                            /src/ = Ordner namens "src"
+                            main.jsx = Datei namens "main" (JSX = React-JavaScript)
+      
+      ABLAUF wenn diese Zeile ausgeführt wird:
+      1. Browser lädt /src/main.jsx
+      2. React-Bibliothek wird geladen
+      3. React sucht <div id="root">
+      4. React rendert (= zeigt) die App-Komponente hier
+      5. Die Webseite wird LEBENDIG:
+         - Karte wird geladen
+         - Filter werden initialisiert
+         - 14.000+ Inschriften-Punkte werden dargestellt
+         - Du kannst klicken, filtern, zoomen, etc.
+      
+      WICHTIG: React macht DYNAMISCHE Seiten (der Inhalt ändert sich basierend auf Nutzer-Aktionen)
+      Unterschied zu statischen HTML-Seiten (nur Text & Bilder, nicht interaktiv)
+    -->
+
+  </body>
+  <!-- </body> = Ende des sichtbaren Inhalts -->
+
+</html>
+<!-- </html> = Ende des GESAMTEN Dokuments -->
+
+<!-- 
+════════════════════════════════════════════════════════════════════════════════
+ZUSAMMENFASSUNG - WAS IST DIE AUFGABE JEDER ZEILE?
+════════════════════════════════════════════════════════════════════════════════
+
+1. <!doctype html>
+   → Browser: "Das ist modernes HTML5 (nicht altes HTML 4)"
+
+2. <html lang="en">
+   → Äußerstes Container-Tag, Sprache = Englisch
+
+3. <head>
+   → Unsichtbarer Kopf-Abschnitt (Metadaten)
+
+4. <meta charset="UTF-8">
+   → "Ich unterstütze alle Sprachen der Welt (ä, ö, Griechisch, Chinesisch, Emoji)"
+
+5. <link rel="icon" href="/favicon.svg">
+   → "Das bunte Icon in dem Browser-Tab - dorthin!"
+
+6. <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   → "Handy-freundlich machen: Größe dem Bildschirm anpassen"
+
+7. <meta name="robots" content="noindex, nofollow">
+   → "Google: Diese Seite nicht indexieren/folgen (Student-Projekt)"
+
+8. <title>select-viz</title>
+   → "Browser-Tab Name & Google-Suchergebnis Titel"
+
+9. <div id="root"></div>
+   → "HIER wird React die ganze Anwendung einfügen (aktuell leer)"
+
+10. <script type="module" src="/src/main.jsx"></script>
+    → "STARTKNOPF! Lade React und baue die Anwendung auf"
+
+
+════════════════════════════════════════════════════════════════════════════════
+FRAGEN & ANTWORTEN
+════════════════════════════════════════════════════════════════════════════════
+
+F: Warum ist der Body fast leer?
+A: Weil React JavaScript dynamisch (zur Laufzeit) den Inhalt erstellt.
+   Die HTML-Datei ist nur die "Grundgerüst". React füllt es mit Leben.
+
+F: Was ist JSX?
+A: JavaScript + XML / HTML-ähnliche Syntax
+   Erlaubt: <div> Tags direkt im JavaScript schreiben (nicht HTML, aber sieht so aus)
+
+F: Kann ich den <title> ändern?
+A: Ja! Ersetze "select-viz" mit z.B. "SELECT Inscriptions Map"
+   Der Browser-Tab zeigt dann sofort den neuen Namen.
+
+F: Was macht das "/" im href="/favicon.svg"?
+A: Das "/" bedeutet: "Von der Projekt-Root" (von oberster Ebene)
+   /src/main.jsx = Ordner "src", Datei "main.jsx"
+   ./src/main.jsx = Von aktuellem Ordner
+   ../src/main.jsx = Ein Ordner höher, dann "src"
+
+F: Ist HTML eine Programmiersprache?
+A: Nein! HTML ist eine "Auszeichnungssprache" (Markup Language)
+   Sie strukturiert nur Inhalte mit Tags.
+   JavaScript ist die echte Programmiersprache (Logik, Berechnung, Interaktionen)
+
+════════════════════════════════════════════════════════════════════════════════
+VISUALISIERUNG: Was im Browser passiert
+════════════════════════════════════════════════════════════════════════════════
+
+SCHRITT 1: Browser lädt index.html
+┌─────────────────────────────────────┐
+│ <!DOCTYPE html>                     │
+│ <html>                              │
+│   <head>...</head>                  │
+│   <body>                            │
+│     <div id="root"></div>           │ ← NOCH LEER!
+│     <script type="module">...</script>│
+│   </body>                           │
+│ </html>                             │
+└─────────────────────────────────────┘
+
+SCHRITT 2: <script> lädt React
+Browser → Lade /src/main.jsx
+          → React Bibliothek lädt
+          → React initialisiert
+
+SCHRITT 3: React sucht den Root
+React: "Finde das Element mit id='root'"
+React findet: <div id="root"></div>
+
+SCHRITT 4: React füllt den Root
+React rendert:
+┌─────────────────────────────────────┐
+│ <div id="root">                     │
+│   <div class="app">                 │
+│     <div class="header">...</div>  │ ← React hat eingefügt!
+│     <div class="sidebar">...</div>  │
+│     <div class="map">...</div>      │
+│   </div>                            │
+│ </div>                              │
+└─────────────────────────────────────┘
+
+SCHRITT 5: Seite wird interaktiv
+Nutzer klickt auf Karte → React verändert Zustand
+Zustand ändert sich → React re-rendert
+Bildschirm zeigt neue Inhalte
+→ Seite ist LEBENDIG!
+
+════════════════════════════════════════════════════════════════════════════════
+-->
