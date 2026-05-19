@@ -157,3 +157,23 @@
 - Optionales Map-Overlay während `isProcessing` (zusätzlich zum Header-Feedback)
 - Kurzer UI-Testkatalog als Checkliste für die Vorführung
 - Falls gewünscht: finale Komprimierung der Doku in eine 1‑seitige PDF-Fassung
+
+---
+
+## 7) Abschluss (Commit + Deployment)
+
+### Was wurde gemacht?
+- Produktionsbuild ausgeführt (`npm run build`) und erfolgreich abgeschlossen.
+- Relevante Quellcode- und Dokumentationsdateien committed.
+- Commit auf `origin/main` gepusht.
+- GitHub-Pages-Deployment aus `dist` angestoßen (`npx --yes gh-pages -d dist`).
+
+### Warum?
+- Ziel war ein reproduzierbarer Abschluss mit nachvollziehbarem Release-Stand.
+
+### Ergebnis
+- **Commit auf main:** `b8a5116` (`feat: timeline UX, action spinner feedback, and detailed documentation`)
+- **Push:** erfolgreich auf `origin/main`
+- **Build:** erfolgreich (Vite production build ohne Fehler)
+- **Pages-Publish:** erfolgreich ausgeführt (`Published`)
+
