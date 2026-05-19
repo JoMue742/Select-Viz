@@ -2,13 +2,18 @@ import { useState, useEffect, useMemo } from "react";
 import MapView from "./components/MapView";
 import FilterPanel from "./components/FilterPanel";
 import AboutPanel from "./components/AboutPanel";
+import TimelineBar from "./components/TimelineBar";
+import ThemeToggle from "./components/ThemeToggle";
+import Footer from "./components/Footer";
 import "./App.css";
 
 export default function App() {
   const [allFeatures, setAllFeatures] = useState([]);
   const [loading, setLoading]         = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError]             = useState(null);
   const [activeTab, setActiveTab]     = useState("map");
+  const [showTimeline, setShowTimeline] = useState(true);
 
   // Filter-Zustand: Sprache wird über die Legende gesetzt (kein Dropdown)
   const [filters, setFilters] = useState({
@@ -17,6 +22,7 @@ export default function App() {
     alphabet:         "all",
     dateFrom:         -1000,
     dateTo:            400,
+    timelineYear:      -1000,  // Aktuelles Jahr der Timeline
   });
 
   // Suchfeld für Ort oder ID
@@ -24,7 +30,8 @@ export default function App() {
 
   // GeoJSON laden
   useEffect(() => {
-    fetch("/data/inscriptions_slim.geojson")
+    const dataUrl = `${import.meta.env.BASE_URL}data/inscriptions_slim.geojson`;
+    fetch(dataUrl)
       .then((r) => {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();
@@ -53,11 +60,19 @@ export default function App() {
       if (filters.writingDirection !== "all" && p.writing_direction !== filters.writingDirection) return false;
       if (filters.alphabet !== "all" && p.txt_writingSystem !== filters.alphabet) return false;
 
-      // Zeitraum
+      // Zeitraum (Benutzer-Filter)
       if (p.chr_min !== null || p.chr_max !== null) {
         const von = p.chr_min ?? p.chr_max;
         const bis = p.chr_max ?? p.chr_min;
         if (bis < filters.dateFrom || von > filters.dateTo) return false;
+      }
+
+      // Timeline-Filter: NUR anwenden wenn Timeline sichtbar ist
+      if (showTimeline && p.chr_min !== null && p.chr_max !== null) {
+        const chrMin = p.chr_min;
+        const chrMax = p.chr_max;
+        // Jahr muss zwischen chr_min und chr_max liegen
+        if (filters.timelineYear < chrMin || filters.timelineYear > chrMax) return false;
       }
 
       // Suche: Ort, ID, antiker Ortsname
@@ -69,9 +84,59 @@ export default function App() {
 
       return true;
     });
-  }, [allFeatures, filters, searchQuery]);
+  }, [allFeatures, filters, searchQuery, showTimeline]);
 
   const set = (key, val) => setFilters((f) => ({ ...f, [key]: val }));
+
+  const setWithProcessing = (key, val) => {
+    setIsProcessing(true);
+    setFilters((f) => ({ ...f, [key]: val }));
+  };
+
+  const setSearchQueryWithProcessing = (value) => {
+    setIsProcessing(true);
+    setSearchQuery(value);
+  };
+
+  const setFiltersWithProcessing = (updater) => {
+    setIsProcessing(true);
+    setFilters(updater);
+  };
+
+  // Nach Nutzer-Aktionen kurz sichtbar lassen, dann ausblenden.
+  useEffect(() => {
+    if (!isProcessing || loading) return;
+
+    let raf1 = 0;
+    let raf2 = 0;
+    let timeoutId = 0;
+    const start = performance.now();
+
+    raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => {
+        const elapsed = performance.now() - start;
+        const remaining = Math.max(0, 320 - elapsed);
+        timeoutId = window.setTimeout(() => setIsProcessing(false), remaining);
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+      window.clearTimeout(timeoutId);
+    };
+  }, [filters, searchQuery, showTimeline, activeTab, isProcessing, loading]);
+
+  // Timeline Toggle: Filter zurücksetzen wenn Timeline ausgeschaltet wird
+  const handleTimelineToggle = () => {
+    setIsProcessing(true);
+    if (showTimeline) {
+      // Timeline wird ausgeschaltet -> Filter & Suche zurücksetzen
+      setFilters({ language: "all", writingDirection: "all", alphabet: "all", dateFrom: -1000, dateTo: 400, timelineYear: -1000 });
+      setSearchQuery("");
+    }
+    setShowTimeline(!showTimeline);
+  };
 
   return (
     <div className="app">
@@ -81,28 +146,50 @@ export default function App() {
           <h1>Epigraphic Atlas of Ancient Europe</h1>
         </div>
         <nav className="header-nav">
-          <button className={`nav-btn ${activeTab === "map"   ? "nav-btn--active" : ""}`} onClick={() => setActiveTab("map")}>Karte</button>
-          <button className={`nav-btn ${activeTab === "about" ? "nav-btn--active" : ""}`} onClick={() => setActiveTab("about")}>Über das Projekt</button>
+          <button className={`nav-btn ${activeTab === "map"   ? "nav-btn--active" : ""}`} onClick={() => setActiveTab("map")}>Map</button>
+          <button className={`nav-btn ${activeTab === "about" ? "nav-btn--active" : ""}`} onClick={() => setActiveTab("about")}>About</button>
+          <button 
+            className={`nav-btn ${showTimeline ? "nav-btn--active" : ""}`} 
+            onClick={handleTimelineToggle}
+            title={showTimeline ? "Hide Timeline" : "Show Timeline"}
+          >
+            Timeline
+          </button>
+          <ThemeToggle />
         </nav>
         <div className="header-count">
-          {loading ? <span className="loading-pulse">Lade…</span> : (
+          {loading ? (
+            <span className="loading-inline">
+              <span className="loading-spinner loading-spinner--small" aria-hidden="true" />
+              <span className="loading-pulse">Loading…</span>
+            </span>
+          ) : (
             <span>
-              <span className="count-number">{filtered.length.toLocaleString("de")}</span>
-              <span className="count-label"> / {allFeatures.length.toLocaleString("de")} Inschriften</span>
+              {isProcessing && (
+                <span className="loading-inline loading-inline--update" aria-live="polite">
+                  <span className="loading-spinner loading-spinner--small" aria-hidden="true" />
+                  <span>Updating…</span>
+                </span>
+              )}
+              <span className="count-number">{filtered.length.toLocaleString("en")}</span>
+              <span className="count-label"> / {allFeatures.length.toLocaleString("en")} Inscriptions</span>
             </span>
           )}
         </div>
       </header>
 
+      {showTimeline && <TimelineBar filters={filters} setFilters={setFiltersWithProcessing} />}
+
       <div className="app-body">
         {activeTab === "map" && (
           <>
             <FilterPanel
-              filters={filters} set={set}
+              filters={filters} set={setWithProcessing}
               alphabetOptions={alphabetOptions}
-              searchQuery={searchQuery} setSearchQuery={setSearchQuery}
+              searchQuery={searchQuery} setSearchQuery={setSearchQueryWithProcessing}
               onReset={() => {
-                setFilters({ language: "all", writingDirection: "all", alphabet: "all", dateFrom: -1000, dateTo: 400 });
+                setIsProcessing(true);
+                setFilters({ language: "all", writingDirection: "all", alphabet: "all", dateFrom: -1000, dateTo: 400, timelineYear: -1000 });
                 setSearchQuery("");
               }}
             />
@@ -117,6 +204,8 @@ export default function App() {
         )}
         {activeTab === "about" && <AboutPanel />}
       </div>
+
+      <Footer />
     </div>
   );
 }

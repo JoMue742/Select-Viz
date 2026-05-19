@@ -5,35 +5,35 @@ export default function AboutPanel() {
     <div className="about-panel">
       <div className="about-content">
         <section className="about-section">
-          <h2>Über dieses Projekt</h2>
-          <p>Der <strong>Epigraphic Atlas of Ancient Europe</strong> ist eine wissenschaftliche Visualisierungsplattform für epigraphische Daten aus dem EU-Projekt <strong>SELECT</strong> (Sociolinguistics of European Languages through Contacts and Texts). Die Plattform macht über 14.000 Inschriften in den sogenannten <em>Trümmersprachen</em> Europas durch interaktive Karten und Filter zugänglich.</p>
+          <h2>About this Project</h2>
+          <p>The <strong>Epigraphic Atlas of Ancient Europe</strong> is a scientific visualization platform for epigraphic data from the <strong>SELECT</strong> (Self-Learning Atlas of Ancient European CulTures) project. The platform provides interactive access to over 14,000 inscriptions in the so-called <em>fragmentary languages</em> of Europe.</p>
         </section>
         <section className="about-section">
-          <h2>Was sind Trümmersprachen?</h2>
-          <p>Als <em>Trümmersprachen</em> (engl. <em>fragmentary languages</em>) bezeichnet die Sprachwissenschaft antike Sprachen, die nur in Bruchstücken überliefert sind – hauptsächlich durch Inschriften auf Keramik, Stein, Bronze oder anderen Materialien.</p>
+          <h2>What are Fragmentary Languages?</h2>
+          <p><em>Fragmentary languages</em> are ancient languages known only in fragments—primarily through inscriptions on ceramic, stone, bronze, or other materials.</p>
           <div className="about-lang-grid">
-            {[["Etruskisch","Norditalien, ca. 700–100 v. Chr."],["Venetisch","Nordostitalien, ca. 600–100 v. Chr."],["Messapisch","Südostitalien, ca. 600–100 v. Chr."],["Oskisch","Süditalien, ca. 400–100 v. Chr."],["Faliskisch","Latium, ca. 700–200 v. Chr."],["Iberisch","Iberische Halbinsel, ca. 500–100 v. Chr."],["Keltiberisch","Iberische Halbinsel, ca. 200–100 v. Chr."],["Gallisch","Gallien & Norditalien"],["Rätisch","Alpenraum, ca. 500–100 v. Chr."],["Lepontisch","Norditalien / Schweiz"],["Kamunisch","Norditalien (Valcamonica)"]].map(([n,d]) => (
+            {[["Etruscan","Northern Italy, ca. 700–100 BCE"],["Venetic","Northeastern Italy, ca. 600–100 BCE"],["Messapic","Southeastern Italy, ca. 600–100 BCE"],["Oscan","Southern Italy, ca. 400–100 BCE"],["Faliscan","Latium, ca. 700–200 BCE"],["Iberian","Iberian Peninsula, ca. 500–100 BCE"],["Celtiberian","Iberian Peninsula, ca. 200–100 BCE"],["Gaulish","Gaul & Northern Italy"],["Raetic","Alpine region, ca. 500–100 BCE"],["Lepontic","Northern Italy / Switzerland"],["Camunian","Northern Italy (Valcamonica)"]].map(([n,d]) => (
               <div key={n} className="about-lang-card"><strong>{n}</strong><span>{d}</span></div>
             ))}
           </div>
         </section>
         <section className="about-section">
-          <h2>Was ist Epigraphik?</h2>
-          <p>Die <em>Epigraphik</em> ist die Wissenschaft von Inschriften. Sie untersucht Texte, die in harte Materialien eingeritzt wurden und damit die Zeiten überdauert haben. Epigraphiker:innen entziffern, transkribieren, übersetzen und interpretieren diese Texte.</p>
+          <h2>What is Epigraphy?</h2>
+          <p><em>Epigraphy</em> is the study of inscriptions. It examines texts carved into hard materials that have survived millennia. Epigraphers decipher, transcribe, translate, and interpret these texts.</p>
         </section>
         <section className="about-section">
-          <h2>Die SELECT-Datenbank</h2>
-          <p>Das EU-Projekt SELECT (2018–2023) hat eine umfangreiche Datenbank epigraphischer Quellen aus dem vorklassischen und klassischen Europa erstellt. Der bestehende <a href="https://maps.selecteplus.eu" target="_blank" rel="noreferrer">SELECT-Atlas</a> wurde für den Schulunterricht konzipiert. Diese Plattform erschließt alle forschungsrelevanten Attribute.</p>
+          <h2>The SELECT Database</h2>
+          <p>The SELECT project created a comprehensive database of epigraphic sources from prehistoric and classical Europe. The existing <a href="https://www.selecteplus.eu/" target="_blank" rel="noreferrer">SELECT Atlas</a> was designed for educational use. This platform provides access to all research-relevant attributes.</p>
           <div className="about-stats">
-            {[["14.500+","Inschriften"],["35+","Sprachen"],["1.200+","Fundorte"],["1300 v.–300 n.","Zeitraum"]].map(([n,l]) => (
+            {[["14,500+","Inscriptions"],["35+","Languages"],["1,200+","Sites"],["1300 BCE–300 CE","Period"]].map(([n,l]) => (
               <div key={l} className="about-stat"><span className="about-stat-num">{n}</span><span className="about-stat-label">{l}</span></div>
             ))}
           </div>
         </section>
         <section className="about-section">
-          <h2>Beitragende & Quellen</h2>
-          <p>Datenbasis: SELECT-Datenbankexport (Januar 2026). Entwickelt im Rahmen eines wissenschaftlichen Seminars.</p>
-          <p>Bibliotheken: <a href="https://leafletjs.com" target="_blank" rel="noreferrer">Leaflet</a>, <a href="https://react-leaflet.js.org" target="_blank" rel="noreferrer">react-leaflet</a>, <a href="https://vitejs.dev" target="_blank" rel="noreferrer">Vite</a>, <a href="https://react.dev" target="_blank" rel="noreferrer">React</a>. Karten: <a href="https://carto.com" target="_blank" rel="noreferrer">CARTO</a> / OpenStreetMap.</p>
+          <h2>Contributors & Sources</h2>
+          <p>Data source: SELECT database export (January 2026). Developed as part of an academic seminar.</p>
+          <p>Libraries: <a href="https://leafletjs.com" target="_blank" rel="noreferrer">Leaflet</a>, <a href="https://react-leaflet.js.org" target="_blank" rel="noreferrer">react-leaflet</a>, <a href="https://vitejs.dev" target="_blank" rel="noreferrer">Vite</a>, <a href="https://react.dev" target="_blank" rel="noreferrer">React</a>. Maps: <a href="https://carto.com" target="_blank" rel="noreferrer">CARTO</a> / OpenStreetMap.</p>
         </section>
       </div>
     </div>

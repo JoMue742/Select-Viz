@@ -1,4 +1,4 @@
-.filter-panel {
+.sidebar {
   width: 270px;
   min-width: 270px;
   background: var(--panel-bg);
@@ -10,13 +10,13 @@
   gap: 0;
 }
 
-.filter-panel-header {
+.sidebar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.6rem;
 }
-.filter-panel-header h2 {
+.sidebar-header h2 {
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.15em;
@@ -77,6 +77,8 @@
 }
 .filter-input:focus { outline: none; border-color: var(--accent); }
 .filter-input::placeholder { color: var(--text-muted); }
+
+.date-inputs { display: flex; flex-direction: column; gap: 0.3rem; }
 
 .clear-search {
   background: none;

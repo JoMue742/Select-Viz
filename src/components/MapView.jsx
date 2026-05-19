@@ -1,5 +1,5 @@
-import { useMemo, useRef } from "react";
-import { MapContainer, TileLayer, useMap, Popup, CircleMarker } from "react-leaflet";
+import { useMemo, useRef, useEffect, useState } from "react";
+import { MapContainer, useMap, Popup, CircleMarker } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -49,7 +49,7 @@ const DIR_LABELS = {
 
 function formatYear(y) {
   if (y === null || y === undefined) return "?";
-  return y < 0 ? `${Math.abs(y)} v. Chr.` : `${y} n. Chr.`;
+  return y < 0 ? `${Math.abs(y)} BCE` : `${y} CE`;
 }
 
 // ── Dominante Farbe eines Clusters berechnen ──────────────────────────────────
@@ -116,6 +116,57 @@ function FitBounds({ features }) {
   return null;
 }
 
+// ── Wechsle TileLayer basierend auf Light Mode ────────────────────────────────
+function TileLayerTheme() {
+  const map = useMap();
+  const [isLight, setIsLight] = useState(false);
+
+  useEffect(() => {
+    // Überprüfe initial
+    const htmlEl = document.documentElement;
+    setIsLight(htmlEl.classList.contains('light-mode'));
+
+    // Überwache Änderungen
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          const lightMode = htmlEl.classList.contains('light-mode');
+          setIsLight(lightMode);
+        }
+      });
+    });
+
+    observer.observe(htmlEl, { attributes: true });
+    return () => observer.disconnect();
+  }, []);
+
+  // Wechsle Tiles wenn Theme ändert
+  useEffect(() => {
+    if (!map) return;
+    
+    // Entferne alte TileLayer
+    map.eachLayer((layer) => {
+      if (layer instanceof L.TileLayer) {
+        map.removeLayer(layer);
+      }
+    });
+
+    // Füge neue TileLayer ein
+    const url = isLight 
+      ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+      : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+
+    const tileLayer = L.tileLayer(url, {
+      attribution: '&copy; <a href="https://openstreetmap.org">OSM</a> &copy; <a href="https://carto.com">CARTO</a>',
+      maxZoom: 12,
+    });
+
+    map.addLayer(tileLayer);
+  }, [isLight, map]);
+
+  return null;
+}
+
 // ── Hauptkomponente ───────────────────────────────────────────────────────────
 export default function MapView({ features }) {
   return (
@@ -125,10 +176,7 @@ export default function MapView({ features }) {
       maxZoom={12}
       style={{ width: "100%", height: "100%" }}
     >
-      <TileLayer
-        attribution='&copy; <a href="https://openstreetmap.org">OSM</a> &copy; <a href="https://carto.com">CARTO</a>'
-        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-      />
+      <TileLayerTheme />
       <FitBounds features={features} />
 
       <MarkerClusterGroup
@@ -169,15 +217,15 @@ export default function MapView({ features }) {
               <Popup maxWidth={320}>
                 <div className="popup-inner">
 
-                  {/* Kopfzeile: Sprache + ID */}
+                  {/* Header: Language + ID */}
                   <div className="popup-header">
                     <span className="popup-lang-badge" style={{ background: color }}>
-                      {p.lan_language || "Facies / Nicht bestimmt"}
+                      {p.lan_language || "Facies / Undetermined"}
                     </span>
                     <span className="popup-id">#{p.id}</span>
                   </div>
 
-                  {/* Ort */}
+                  {/* Location */}
                   {(p.loc_spotAncient || p.loc_municipality) && (
                     <div className="popup-place">
                       {p.loc_spotAncient && (
@@ -189,17 +237,17 @@ export default function MapView({ features }) {
                     </div>
                   )}
 
-                  {/* Metadaten-Raster */}
+                  {/* Metadata Grid */}
                   <div className="popup-meta-grid">
                     {p.txt_writingSystem && (
                       <div className="popup-meta-item">
-                        <span className="popup-label">Alphabet</span>
+                        <span className="popup-label">Script</span>
                         <span>{p.txt_writingSystem}</span>
                       </div>
                     )}
                     {(p.chr_min !== null || p.chr_max !== null) && (
                       <div className="popup-meta-item">
-                        <span className="popup-label">Datierung</span>
+                        <span className="popup-label">Dating</span>
                         <span>{formatYear(p.chr_min)} – {formatYear(p.chr_max)}</span>
                       </div>
                     )}
@@ -211,44 +259,44 @@ export default function MapView({ features }) {
                     )}
                     {p.writing_direction && p.writing_direction !== "unknown" && (
                       <div className="popup-meta-item">
-                        <span className="popup-label">Schreibrichtung</span>
+                        <span className="popup-label">Writing Direction</span>
                         <span>{DIR_LABELS[p.writing_direction] || p.writing_direction}</span>
                       </div>
                     )}
                     {p.txt_typeOfText && (
                       <div className="popup-meta-item">
-                        <span className="popup-label">Texttyp</span>
+                        <span className="popup-label">Text Type</span>
                         <span>{p.txt_typeOfText}</span>
                       </div>
                     )}
                     {p.char_count > 0 && (
                       <div className="popup-meta-item">
-                        <span className="popup-label">Zeichen</span>
+                        <span className="popup-label">Characters</span>
                         <span>{p.char_count}</span>
                       </div>
                     )}
                   </div>
 
-                  {/* Inschrift */}
+                  {/* Inscription */}
                   {p.txt_text && (
                     <div className="popup-section">
-                      <span className="popup-label">Inschrift</span>
+                      <span className="popup-label">Inscription</span>
                       <blockquote className="popup-text">{p.txt_text}</blockquote>
                     </div>
                   )}
 
-                  {/* Übersetzung */}
+                  {/* Translation */}
                   {p.txt_Translation && (
                     <div className="popup-section">
-                      <span className="popup-label">Übersetzung</span>
+                      <span className="popup-label">Translation</span>
                       <p className="popup-translation">{p.txt_Translation}</p>
                     </div>
                   )}
 
-                  {/* Quelle */}
+                  {/* Source */}
                   {p.ref_biblio && (
                     <div className="popup-section">
-                      <span className="popup-label">Quelle</span>
+                      <span className="popup-label">Source</span>
                       <span className="popup-biblio">{p.ref_biblio}</span>
                     </div>
                   )}
