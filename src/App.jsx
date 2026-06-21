@@ -13,7 +13,7 @@ export default function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError]             = useState(null);
   const [activeTab, setActiveTab]     = useState("map");
-  const [showTimeline, setShowTimeline] = useState(true);
+  const [showTimeline, setShowTimeline] = useState(false);
 
   // Filter-Zustand: Sprache wird über die Legende gesetzt (kein Dropdown)
   const [filters, setFilters] = useState({
