@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SELECT Timeline Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --panel: #171717;
+      --panel-2: #1f1f1f;
+      --border: #2b2b2b;
+      --text: #ede6da;
+      --muted: #a79f93;
+      --accent: #c9973a;
+      --accent-soft: rgba(201, 151, 58, 0.16);
+      --good: #6a994e;
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-mono: 'DM Mono', monospace;
+      --font-ui: system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: radial-gradient(circle at top, #1a1712, var(--bg) 60%); color: var(--text); font-family: var(--font-ui); }
+    body { padding: 24px; }
+
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent), var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.35);
+    }
+
+    .hero {
+      padding: 28px 28px 20px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(201,151,58,0.12), transparent 50%);
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-size: 0.72rem;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 600;
+      line-height: 0.95;
+    }
+
+    .subtitle {
+      max-width: 60ch;
+      color: var(--muted);
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: grid;
+      gap: 14px;
+      padding: 22px 28px 0;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--panel-2);
+    }
+
+    .label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      min-width: 120px;
+    }
+
+    input[type="range"] {
+      flex: 1;
+      min-width: 240px;
+      accent-color: var(--accent);
+    }
+
+    .year {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      color: var(--accent);
+      min-width: 120px;
+      text-align: right;
+    }
+
+    .btn {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 0.55rem 1rem;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1.35fr 0.9fr;
+      padding: 24px 28px 28px;
+    }
+
+    .panel {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+    }
+
+    .cards {
+      display: grid;
+      gap: 10px;
+    }
+
+    .card {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid transparent;
+      color: var(--muted);
+    }
+
+    .card strong { color: var(--text); }
+    .card.is-active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--text);
+    }
+
+    .status {
+      display: grid;
+      gap: 10px;
+    }
+
+    .stat {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .stat .k {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat .v {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .hint { color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+
+    @media (max-width: 860px) {
+      .grid { grid-template-columns: 1fr; }
+      .year { text-align: left; }
+      .label { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div class="eyebrow">SELECT Assignment 2.2</div>
+      <h1>Timeline Explorer</h1>
+      <p class="subtitle">A tiny vanilla JavaScript application that moves through time, highlights which ancient language regions are active, and shows how many items are visible at the current year.</p>
+    </section>
+
+    <section class="controls">
+      <div class="control-row">
+        <div class="label">Year</div>
+        <input id="yearSlider" type="range" min="-1000" max="400" step="50" value="-1000" />
+        <div class="year" id="yearLabel">1000 BCE</div>
+      </div>
+      <div class="control-row">
+        <button class="btn" id="playBtn" type="button">Play</button>
+        <button class="btn" id="resetBtn" type="button">Reset</button>
+        <div class="hint" id="statusText">Choose a year to see which regions are active.</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="panel">
+        <h2>Visible periods</h2>
+        <div class="cards" id="cards"></div>
+      </div>
+      <aside class="panel status">
+        <div class="stat">
+          <div class="k">Current selection</div>
+          <div class="v" id="currentSelection">1000 BCE</div>
+        </div>
+        <div class="stat">
+          <div class="k">Active items</div>
+          <div class="v" id="activeCount">0 / 0</div>
+        </div>
+        <div class="stat">
+          <div class="k">What it demonstrates</div>
+          <div class="v">State, events, DOM updates, and a small animation loop.</div>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>
