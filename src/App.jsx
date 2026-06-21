@@ -146,12 +146,31 @@ export default function App() {
           <h1>Epigraphic Atlas of Ancient Europe</h1>
         </div>
         <nav className="header-nav">
-          <button className={`nav-btn ${activeTab === "map"   ? "nav-btn--active" : ""}`} onClick={() => setActiveTab("map")}>Map</button>
-          <button className={`nav-btn ${activeTab === "about" ? "nav-btn--active" : ""}`} onClick={() => setActiveTab("about")}>About</button>
+          <button
+            type="button"
+            className={`nav-btn ${activeTab === "map"   ? "nav-btn--active" : ""}`}
+            onClick={() => setActiveTab("map")}
+            aria-current={activeTab === "map" ? "page" : undefined}
+            aria-label="Show map view"
+          >
+            Map
+          </button>
+          <button
+            type="button"
+            className={`nav-btn ${activeTab === "about" ? "nav-btn--active" : ""}`}
+            onClick={() => setActiveTab("about")}
+            aria-current={activeTab === "about" ? "page" : undefined}
+            aria-label="Show about view"
+          >
+            About
+          </button>
           <button 
+            type="button"
             className={`nav-btn ${showTimeline ? "nav-btn--active" : ""}`} 
             onClick={handleTimelineToggle}
             title={showTimeline ? "Hide Timeline" : "Show Timeline"}
+            aria-pressed={showTimeline}
+            aria-label={showTimeline ? "Hide timeline" : "Show timeline"}
           >
             Timeline
           </button>
@@ -180,7 +199,7 @@ export default function App() {
 
       {showTimeline && <TimelineBar filters={filters} setFilters={setFiltersWithProcessing} />}
 
-      <div className="app-body">
+      <main className="app-body" id="main-content">
         {activeTab === "map" && (
           <>
             <FilterPanel
@@ -193,17 +212,21 @@ export default function App() {
                 setSearchQuery("");
               }}
             />
-            <main className="map-container">
+            <section className="map-container" aria-label="Map with filtered inscriptions">
               {error && <div className="error-banner">⚠️ {error} – liegt inscriptions_slim.geojson in public/data/?</div>}
               {loading
                 ? <div className="loading-screen"><div className="loading-spinner"/><p>Lade <em>14.000+</em> Inschriften…</p></div>
                 : <MapView features={filtered} />
               }
-            </main>
+            </section>
           </>
         )}
-        {activeTab === "about" && <AboutPanel />}
-      </div>
+        {activeTab === "about" && (
+          <article aria-labelledby="about-title">
+            <AboutPanel />
+          </article>
+        )}
+      </main>
 
       <Footer />
     </div>

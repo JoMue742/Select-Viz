@@ -1,12 +1,14 @@
 export default function Footer() {
+  const base = import.meta.env.BASE_URL;
+
   return (
     <footer className="app-footer">
       <div className="footer-left">
         <span>© 2026 SELECT Project</span>
-        <a href="#" className="footer-link">
+        <a href="https://github.com/JoMue742/Select-Viz/tree/main/select-viz/docs" className="footer-link" target="_blank" rel="noreferrer">
           Documentation
         </a>
-        <a href="#" className="footer-link">
+        <a href={`${base}LICENSE.txt`} className="footer-link" target="_blank" rel="noreferrer">
           License
         </a>
       </div>

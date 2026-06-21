@@ -1,4 +1,4 @@
-import { LANGUAGE_COLORS, getColor } from "./MapView";
+import { LANGUAGE_COLORS } from "./MapView";
 import "./FilterPanel.css";
 
 const DIR_LABELS = {
@@ -23,6 +23,8 @@ export default function FilterPanel({
   filters, set, alphabetOptions,
   searchQuery, setSearchQuery, onReset,
 }) {
+  const languageEntries = Object.entries(LANGUAGE_COLORS);
+
   const isActive =
     filters.language !== "all" || filters.writingDirection !== "all" ||
     filters.alphabet !== "all" || filters.dateFrom !== -1000 ||
@@ -38,8 +40,9 @@ export default function FilterPanel({
 
       {/* Search */}
       <div className="filter-group">
-        <label className="filter-label">Search</label>
+        <label className="filter-label" htmlFor="searchInput">Search</label>
         <input
+          id="searchInput"
           type="text"
           className="filter-input"
           placeholder="Place, ID..."
@@ -58,47 +61,65 @@ export default function FilterPanel({
         </label>
         <div className="date-inputs">
           <input 
+            id="dateFromInput"
             type="number" 
             className="filter-input"
             value={filters.dateFrom}
             onChange={(e) => { const v = +e.target.value; if (v <= filters.dateTo) set("dateFrom", v); }}
             placeholder="From"
+            aria-label="Start year"
           />
           <input 
+            id="dateToInput"
             type="number" 
             className="filter-input"
             value={filters.dateTo}
             onChange={(e) => { const v = +e.target.value; if (v >= filters.dateFrom) set("dateTo", v); }}
             placeholder="To"
+            aria-label="End year"
           />
         </div>
       </div>
 
-      {/* Language as Scroll List */}
-      <div className="filter-group">
+      {/* Language legend with colored dots */}
+      <div className="filter-group legend-group">
         <label className="filter-label">Language</label>
-        <div className="scroll-list">
-          <div
-            className={`scroll-item ${filters.language === "all" ? "scroll-item--active" : ""}`}
+        <div className="legend">
+          <button
+            type="button"
+            className={`legend-item ${filters.language === "all" ? "legend-item--active" : ""}`}
             onClick={() => set("language", "all")}
+            aria-pressed={filters.language === "all"}
           >
-            All
-          </div>
-          {Object.keys(LANGUAGE_COLORS).map((lang) => (
-            <div
+            <span className="legend-dot" style={{ background: "var(--accent)" }} />
+            <span className="legend-name">All</span>
+          </button>
+
+          {languageEntries.map(([lang, color]) => (
+            <button
+              type="button"
               key={lang}
-              className={`scroll-item ${filters.language === lang ? "scroll-item--active" : ""}`}
+              className={`legend-item ${filters.language === lang ? "legend-item--active" : ""}`}
               onClick={() => set("language", filters.language === lang ? "all" : lang)}
+              aria-pressed={filters.language === lang}
             >
-              {lang}
-            </div>
+              <span className="legend-dot" style={{ background: color }} />
+              <span className="legend-name">{lang}</span>
+            </button>
           ))}
-          <div
-            className={`scroll-item ${filters.language === "Unbekannt" ? "scroll-item--active" : ""}`}
+
+          <button
+            type="button"
+            className={`legend-item ${filters.language === "Unbekannt" ? "legend-item--active" : ""}`}
             onClick={() => set("language", filters.language === "Unbekannt" ? "all" : "Unbekannt")}
+            title="Einträge ohne Sprachzuweisung, oft archäologische Facies"
+            aria-pressed={filters.language === "Unbekannt"}
           >
-            Facies / Undetermined
-          </div>
+            <span className="legend-dot" style={{ background: "#778da9" }} />
+            <span className="legend-name" title="Einträge ohne Sprachzuweisung, oft archäologische Facies">
+              Facies / Undetermined
+            </span>
+          </button>
         </div>
       </div>
 
@@ -106,20 +127,24 @@ export default function FilterPanel({
       <div className="filter-group">
         <label className="filter-label">Script</label>
         <div className="scroll-list">
-          <div
+          <button
+            type="button"
             className={`scroll-item ${filters.alphabet === "all" ? "scroll-item--active" : ""}`}
             onClick={() => set("alphabet", "all")}
+            aria-pressed={filters.alphabet === "all"}
           >
             All
-          </div>
+          </button>
           {alphabetOptions.map((a) => (
-            <div
+            <button
+              type="button"
               key={a}
               className={`scroll-item ${filters.alphabet === a ? "scroll-item--active" : ""}`}
               onClick={() => set("alphabet", filters.alphabet === a ? "all" : a)}
+              aria-pressed={filters.alphabet === a}
             >
               {a}
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -131,8 +156,10 @@ export default function FilterPanel({
           {DIRECTIONS.map((d) => (
             <button
               key={d}
+              type="button"
               className={`chip ${filters.writingDirection === d ? "chip--active" : ""}`}
               onClick={() => set("writingDirection", filters.writingDirection === d ? "all" : d)}
+              aria-pressed={filters.writingDirection === d}
             >
               {DIR_LABELS[d]}
             </button>

@@ -41,26 +41,33 @@ export default function TimelineBar({ filters, setFilters }) {
   };
 
   return (
-    <div className="timeline-bar">
-      <label className="timeline-label">Timeline:</label>
+    <section className="timeline-bar" aria-label="Timeline controls">
+      <label className="timeline-label" htmlFor="timelineSlider">Timeline:</label>
       <input
+        id="timelineSlider"
         type="range"
         className="timeline-slider"
         min="-1000"
         max="400"
         value={currentYear}
         onChange={handleSliderChange}
+        aria-valuemin={-1000}
+        aria-valuemax={400}
+        aria-valuenow={currentYear}
+        aria-valuetext={formatYear(currentYear)}
       />
-      <div className="timeline-year">{formatYear(currentYear)}</div>
+      <div className="timeline-year" aria-live="polite">{formatYear(currentYear)}</div>
       <button 
+        type="button"
         className="timeline-button" 
         onClick={handlePlay}
+        aria-pressed={isAnimating}
       >
         {isAnimating ? "⏸ Pause" : "▶ Play"}
       </button>
-      <button className="timeline-button" onClick={handleReset}>
+      <button type="button" className="timeline-button" onClick={handleReset}>
         ↻ Reset
       </button>
-    </div>
+    </section>
   );
 }

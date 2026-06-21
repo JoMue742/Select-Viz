@@ -2,10 +2,10 @@ import "./AboutPanel.css";
 
 export default function AboutPanel() {
   return (
-    <div className="about-panel">
+    <div className="about-panel" role="region" aria-labelledby="about-title">
       <div className="about-content">
         <section className="about-section">
-          <h2>About this Project</h2>
+          <h2 id="about-title">About this Project</h2>
           <p>The <strong>Epigraphic Atlas of Ancient Europe</strong> is a scientific visualization platform for epigraphic data from the <strong>SELECT</strong> (Self-Learning Atlas of Ancient European CulTures) project. The platform provides interactive access to over 14,000 inscriptions in the so-called <em>fragmentary languages</em> of Europe.</p>
         </section>
         <section className="about-section">
