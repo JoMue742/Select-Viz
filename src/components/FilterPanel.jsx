@@ -53,13 +53,14 @@ export default function FilterPanel({
 
       {/* Period with Number Inputs */}
       <div className="filter-group">
-        <label className="filter-label">
+        <label className="filter-label" htmlFor="dateFromInput">
           Period
           <span className="filter-label-range">
             {formatYear(filters.dateFrom)} – {formatYear(filters.dateTo)}
           </span>
         </label>
         <div className="date-inputs">
+          <label htmlFor="dateFromInput" className="sr-only">From year</label>
           <input 
             id="dateFromInput"
             type="number" 
@@ -69,6 +70,7 @@ export default function FilterPanel({
             placeholder="From"
             aria-label="Start year"
           />
+          <label htmlFor="dateToInput" className="sr-only">To year</label>
           <input 
             id="dateToInput"
             type="number" 
@@ -170,3 +172,4 @@ export default function FilterPanel({
     </aside>
   );
 }
+

@@ -7,8 +7,8 @@
   --border:         #2a2a2a;
   --hover-bg:       #222222;
   --text:           #e8e0d4;
-  --text-secondary: #a89f94;
-  --text-muted:     #5a5450;
+  --text-secondary: #b8afa4;
+  --text-muted:     #8a8380;
   --accent:         #c9973a;
   --font-display:   'Cormorant Garamond', Georgia, serif;
   --font-mono:      'DM Mono', monospace;
@@ -22,8 +22,8 @@ html.light-mode {
   --border:         #d4d0ca;
   --hover-bg:       #e8e0d4;
   --text:           #1a1614;
-  --text-secondary: #5a5450;
-  --text-muted:     #a89f94;
+  --text-secondary: #3d3a38;
+  --text-muted:     #6b6460;
   --accent:         #c9973a;
 }
 
@@ -304,3 +304,4 @@ input:focus-visible {
     min-height: 52vh;
   }
 }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
