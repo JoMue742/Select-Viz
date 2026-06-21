@@ -68,7 +68,6 @@ export default function FilterPanel({
             value={filters.dateFrom}
             onChange={(e) => { const v = +e.target.value; if (v <= filters.dateTo) set("dateFrom", v); }}
             placeholder="From"
-            aria-label="Start year"
           />
           <label htmlFor="dateToInput" className="sr-only">To year</label>
           <input 
@@ -78,7 +77,6 @@ export default function FilterPanel({
             value={filters.dateTo}
             onChange={(e) => { const v = +e.target.value; if (v >= filters.dateFrom) set("dateTo", v); }}
             placeholder="To"
-            aria-label="End year"
           />
         </div>
       </div>
