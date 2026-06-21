@@ -15,7 +15,7 @@ export default function TimelineBar({ filters, setFilters }) {
 
     const interval = setInterval(() => {
       setCurrentYear((y) => (y >= 400 ? -1000 : y + 5));
-    }, 100);
+    }, 200);
 
     return () => clearInterval(interval);
   }, [isAnimating]);
