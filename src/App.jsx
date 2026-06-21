@@ -198,8 +198,7 @@ export default function App() {
       </header>
 
       {showTimeline && <TimelineBar filters={filters} setFilters={setFiltersWithProcessing} />}
-
-      <main className="app-body" id="main-content">
+      <main className={`app-body${activeTab==="about"?" app-body--about":""}`} id="main-content">
         {activeTab === "map" && (
           <>
             <FilterPanel
